@@ -1,3 +1,5 @@
+#require: rubocop-rails
+
 AllCops:
   TargetRubyVersion: 2.1
   Exclude:
@@ -8,7 +10,6 @@ AllCops:
   # https://github.com/bbatsov/rubocop/blob/e8680418b351491e111a18cf5b453fc07a3c5239/config/default.yml#L60-L77
   UseCache: true
   CacheRootDirectory: tmp
-  require: rubocop-rails
 
 Lint/NestedMethodDefinition:
   Enabled: false

@@ -31,7 +31,7 @@ else
     ]
     desc 'Execute rubocop'
     RuboCop::RakeTask.new(:rubocop) do |task|
-      task.options = ['--rails', '--display-cop-names', '--display-style-guide']
+      task.options = ['--display-cop-names', '--display-style-guide']
       task.formatters = ['progress']
       task.patterns = patterns
       task.fail_on_error = true
