@@ -3,10 +3,13 @@
 ### [master (unreleased)](https://github.com/rails-api/active_model_serializers/compare/v0.10.13...0-10-stable)
 
 Breaking changes:
-
+- TODO: Put this somewhere else as is not a minor change.
+- Dropping support for Ruby <=2.7 as it is EOL
+- Dropping support for Rails <=6.0 as it is EOL
 Features:
-
 Fixes:
+- Update rubocop to 1.18.4
+- Remove travis
 
 Misc:
 
