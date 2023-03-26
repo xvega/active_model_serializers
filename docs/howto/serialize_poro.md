@@ -19,7 +19,7 @@ class MyModel
   end
 
   def self.model_name
-    @_model_name ||= ActiveModel::Name.new(self)
+    @model_name ||= ActiveModel::Name.new(self)
   end
 end
 ```

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 # {http://jsonapi.org/format/ JSON API specification}
-# rubocop:disable Style/AsciiComments
 # TODO: implement!
 #  ☐ https://github.com/rails-api/active_model_serializers/issues/1235
 # TODO: use uri_template in link generation?
@@ -39,12 +38,12 @@ module ActiveModelSerializers
         :dash
       end
 
-      def self.fragment_cache(cached_hash, non_cached_hash, root = true)
+      def self.fragment_cache(cached_hash, non_cached_hash, root: true)
         core_cached       = cached_hash.first
         core_non_cached   = non_cached_hash.first
         no_root_cache     = cached_hash.delete_if { |key, _value| key == core_cached[0] }
         no_root_non_cache = non_cached_hash.delete_if { |key, _value| key == core_non_cached[0] }
-        cached_resource   = (core_cached[1]) ? core_cached[1].deep_merge(core_non_cached[1]) : core_non_cached[1]
+        cached_resource   = core_cached[1] ? core_cached[1].deep_merge(core_non_cached[1]) : core_non_cached[1]
         hash = root ? { root => cached_resource } : cached_resource
 
         hash.deep_merge no_root_non_cache.deep_merge no_root_cache
@@ -88,6 +87,7 @@ module ActiveModelSerializers
       #    jsonapi: toplevel_jsonapi
       #  }.reject! {|_,v| v.nil? }
       # rubocop:disable Metrics/CyclomaticComplexity
+      # rubocop:disable Metrics/PerceivedComplexity
       def success_document
         is_collection = serializer.respond_to?(:each)
         serializers = is_collection ? serializer : [serializer]
@@ -156,6 +156,7 @@ module ActiveModelSerializers
         hash
       end
       # rubocop:enable Metrics/CyclomaticComplexity
+      # rubocop:enable Metrics/PerceivedComplexity
 
       # {http://jsonapi.org/format/#errors JSON API Errors}
       # TODO: look into caching
@@ -235,6 +236,7 @@ module ActiveModelSerializers
       #     [x] url helpers https://github.com/rails-api/active_model_serializers/issues/1269
       #   meta
       #     [x] https://github.com/rails-api/active_model_serializers/pull/1340
+      # rubocop:disable Style/CombinableLoops
       def resource_objects_for(serializers)
         @primary = []
         @included = []
@@ -244,6 +246,7 @@ module ActiveModelSerializers
 
         [@primary, @included]
       end
+      # rubocop:enable Style/CombinableLoops
 
       def process_resource(serializer, primary, include_slice = {})
         resource_identifier = ResourceIdentifier.new(serializer, instance_options).as_json
@@ -335,6 +338,7 @@ module ActiveModelSerializers
         resource_object
       end
 
+      # rubocop:disable Metrics/CyclomaticComplexity
       def data_for(serializer, include_slice)
         data = serializer.fetch(self) do
           resource_object = ResourceIdentifier.new(serializer, instance_options).as_json
@@ -347,12 +351,14 @@ module ActiveModelSerializers
         end
         data.tap do |resource_object|
           next if resource_object.nil?
+
           # NOTE(BF): the attributes are cached above, separately from the relationships, below.
           requested_associations = fieldset.fields_for(resource_object[:type]) || '*'
           relationships = relationships_for(serializer, requested_associations, include_slice)
           resource_object[:relationships] = relationships if relationships.any?
         end
       end
+      # rubocop:enable Metrics/CyclomaticComplexity
 
       # {http://jsonapi.org/format/#document-resource-object-relationships Document Resource Object Relationship}
       # relationships
@@ -485,6 +491,7 @@ module ActiveModelSerializers
       def links_for(serializer)
         serializer._links.each_with_object({}) do |(name, value), hash|
           next if value.excluded?(serializer)
+
           result = Link.new(serializer, value.block).as_json
           hash[name] = result if result
         end

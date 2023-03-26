@@ -29,7 +29,7 @@ module ActiveModelSerializers
           @virtual_value = VirtualValue.new(id: 1)
 
           @serializer = AuthorSerializer.new(@author)
-          @adapter = ActiveModelSerializers::Adapter::JsonApi.new(@serializer, include: [:bio, :posts])
+          @adapter = ActiveModelSerializers::Adapter::JsonApi.new(@serializer, include: %i[bio posts])
         end
 
         def test_includes_bio_id

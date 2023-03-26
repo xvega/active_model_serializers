@@ -363,6 +363,7 @@ module ActiveModelSerializers
           model = new_model(model_attributes)
           model.define_singleton_method(:read_attribute_for_serialization) do |attr|
             fail 'should not be called' if attr == :blog
+
             super(attr)
           end
           assert_nothing_raised do

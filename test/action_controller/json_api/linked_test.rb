@@ -7,6 +7,7 @@ module ActionController
     class JsonApi
       class LinkedTest < ActionDispatch::IntegrationTest
         class LinkedTestController < ActionController::Base
+          # rubocop:disable Metrics/AbcSize
           def setup_post
             ActionController::Base.cache_store.clear
             @role1 = Role.new(id: 1, name: 'admin')
@@ -37,6 +38,7 @@ module ActionController
             @post.blog = @blog
             @post2.blog = @blog
           end
+          # rubocop:enable Metrics/AbcSize
 
           def render_resource_without_include
             setup_post
@@ -89,7 +91,7 @@ module ActionController
         setup do
           @routes = Rails.application.routes.draw do
             ActiveSupport::Deprecation.silence do
-              match ':action', to: LinkedTestController, via: [:get, :post]
+              match ':action', to: LinkedTestController, via: %i[get post]
             end
           end
         end

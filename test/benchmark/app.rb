@@ -14,12 +14,12 @@ require 'action_controller/railtie'
 abort "Rails application already defined: #{Rails.application.class}" if Rails.application
 
 class NullLogger < Logger
-  def initialize(*_args)
-  end
-
-  def add(*_args, &_block)
-  end
+  # rubocop:disable Lint/MissingSuper
+  def initialize(*_args); end
+  # rubocop:enable Lint/MissingSuper
+  def add(*_args, &_block); end
 end
+
 class BenchmarkLogger < ActiveSupport::Logger
   def initialize
     @file = StringIO.new
@@ -31,6 +31,7 @@ class BenchmarkLogger < ActiveSupport::Logger
     @file.read
   end
 end
+
 # ref: https://gist.github.com/bf4/8744473
 class BenchmarkApp < Rails::Application
   # Set up production configuration

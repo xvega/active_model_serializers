@@ -57,7 +57,7 @@ module ActiveModelSerializers
         end
 
         def test_limiting_linked_post_fields
-          @adapter = ActiveModelSerializers::Adapter::JsonApi.new(@serializer, include: [:post], fields: { post: [:title, :comments, :blog, :author] })
+          @adapter = ActiveModelSerializers::Adapter::JsonApi.new(@serializer, include: [:post], fields: { post: %i[title comments blog author] })
           expected = [{
             id: '42',
             type: 'posts',
@@ -109,7 +109,7 @@ module ActiveModelSerializers
 
         def test_include_linked_resources_with_type_name
           serializer = BlogSerializer.new(@blog)
-          adapter = ActiveModelSerializers::Adapter::JsonApi.new(serializer, include: [:writer, :articles])
+          adapter = ActiveModelSerializers::Adapter::JsonApi.new(serializer, include: %i[writer articles])
           linked = adapter.serializable_hash[:included]
           expected = [
             {

@@ -143,6 +143,7 @@ module ActiveModel
         attributes :id, :title
         associations :blog
       end
+
       class BelongsToBlogModelSerializer < ActiveModel::Serializer
         type :posts
         belongs_to :blog
@@ -177,10 +178,12 @@ module ActiveModel
       class ExternalBlog < Blog
         attributes :external_id
       end
+
       class BelongsToExternalBlogModel < ::Model
         attributes :id, :title, :external_blog_id
         associations :external_blog
       end
+
       class BelongsToExternalBlogModelSerializer < ActiveModel::Serializer
         type :posts
         belongs_to :external_blog
@@ -248,14 +251,17 @@ module ActiveModel
           class Post < ::Model
             associations :comments, :author, :description
           end
+
           class Comment < ::Model; end
           class Author  < ::Model; end
           class Description < ::Model; end
+
           class PostSerializer < ActiveModel::Serializer
             has_many :comments
             belongs_to :author
             has_one :description
           end
+
           class CommentSerializer     < ActiveModel::Serializer; end
           class AuthorSerializer      < ActiveModel::Serializer; end
           class DescriptionSerializer < ActiveModel::Serializer; end
@@ -295,6 +301,7 @@ module ActiveModel
             comments[0..3]
           end
         end
+
         class Comment < ::Model; end
         class Author  < ::Model; end
         class Description < ::Model; end
@@ -306,6 +313,7 @@ module ActiveModel
             belongs_to :author, namespace: ResourceNamespace
             has_one :description, namespace: ResourceNamespace
           end
+
           class CommentSerializer     < ActiveModel::Serializer; end
           class AuthorSerializer      < ActiveModel::Serializer; end
           class DescriptionSerializer < ActiveModel::Serializer; end
@@ -341,9 +349,11 @@ module ActiveModel
         class Post < ::Model
           associations :comments, :author, :description
         end
+
         class Comment < ::Model; end
         class Author  < ::Model; end
         class Description < ::Model; end
+
         class PostSerializer < ActiveModel::Serializer
           has_many :comments
           class CommentSerializer < ActiveModel::Serializer; end
@@ -379,6 +389,7 @@ module ActiveModel
         end
 
         # rubocop:disable Metrics/AbcSize
+        # rubocop:disable Lint/BooleanSymbol
         def test_conditional_associations
           model = Class.new(::Model) do
             attributes :true, :false
@@ -398,10 +409,10 @@ module ActiveModel
             { options: { if:     -> { object.false } }, included: false },
             { options: { unless: -> { object.false } }, included: true  },
             { options: { unless: -> { object.true }  }, included: false },
-            { options: { if:     -> (s) { s.object.true }  }, included: true  },
-            { options: { if:     -> (s) { s.object.false } }, included: false },
-            { options: { unless: -> (s) { s.object.false } }, included: true  },
-            { options: { unless: -> (s) { s.object.true }  }, included: false }
+            { options: { if:     ->(s) { s.object.true }  }, included: true  },
+            { options: { if:     ->(s) { s.object.false } }, included: false },
+            { options: { unless: ->(s) { s.object.false } }, included: true  },
+            { options: { unless: ->(s) { s.object.true }  }, included: false }
           ]
 
           scenarios.each do |s|
@@ -421,6 +432,8 @@ module ActiveModel
             assert_equal(s[:included], hash.key?(:something), "Error with #{s[:options]}")
           end
         end
+        # rubocop:enable Metrics/AbcSize
+        # rubocop:enable Lint/BooleanSymbol
 
         def test_illegal_conditional_associations
           exception = assert_raises(TypeError) do
@@ -470,19 +483,19 @@ module ActiveModel
         end
 
         test 'an author serializer must have [posts,roles,bio] associations' do
-          expected = [:posts, :roles, :bio].sort
+          expected = %i[posts roles bio].sort
           result = @author_serializer.associations.map(&:name).sort
           assert_equal(result, expected)
         end
 
         test 'a post serializer must have [author,comments,blog] associations' do
-          expected = [:author, :comments, :blog].sort
+          expected = %i[author comments blog].sort
           result = @post_serializer.associations.map(&:name).sort
           assert_equal(result, expected)
         end
 
         test 'a serializer inheriting from another serializer can redefine has_many and has_one associations' do
-          expected = [:roles, :bio].sort
+          expected = %i[roles bio].sort
           result = (@inherited_author_associations.map(&:reflection) - @author_associations.map(&:reflection)).map(&:name)
           assert_equal(result, expected)
           assert_equal [true, false, true], @inherited_author_associations.map(&:polymorphic?)
@@ -490,8 +503,8 @@ module ActiveModel
         end
 
         test 'a serializer inheriting from another serializer can redefine belongs_to associations' do
-          assert_equal [:author, :comments, :blog], @post_associations.map(&:name)
-          assert_equal [:author, :comments, :blog, :comments], @inherited_post_associations.map(&:name)
+          assert_equal %i[author comments blog], @post_associations.map(&:name)
+          assert_equal %i[author comments blog comments], @inherited_post_associations.map(&:name)
 
           refute @post_associations.detect { |assoc| assoc.name == :author }.polymorphic?
           assert @inherited_post_associations.detect { |assoc| assoc.name == :author }.polymorphic?
@@ -510,7 +523,7 @@ module ActiveModel
         end
 
         test 'a serializer inheriting from another serializer can have an additional association with the same name but with different key' do
-          expected = [:author, :comments, :blog, :reviews].sort
+          expected = %i[author comments blog reviews].sort
           result = @inherited_post_serializer.associations.map(&:key).sort
           assert_equal(result, expected)
         end

@@ -6,15 +6,18 @@ module ActiveModel
       class Blog < ActiveModelSerializers::Model
         attributes :id, :name, :authors
       end
+
       class Author < ActiveModelSerializers::Model
         attributes :id, :name
       end
+
       class BlogSerializer < ActiveModel::Serializer
         attributes :id
         attribute :name, key: :title
 
         has_many :authors
       end
+
       class AuthorSerializer < ActiveModel::Serializer
         attributes :id, :name
       end

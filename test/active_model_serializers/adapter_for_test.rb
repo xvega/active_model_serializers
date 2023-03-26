@@ -97,26 +97,26 @@ module ActiveModelSerializers
 
     def test_adapter_map
       expected_adapter_map = {
-        'null'.freeze              => ActiveModelSerializers::Adapter::Null,
-        'json'.freeze              => ActiveModelSerializers::Adapter::Json,
-        'attributes'.freeze => ActiveModelSerializers::Adapter::Attributes,
-        'json_api'.freeze => ActiveModelSerializers::Adapter::JsonApi
+        'null' => ActiveModelSerializers::Adapter::Null,
+        'json' => ActiveModelSerializers::Adapter::Json,
+        'attributes' => ActiveModelSerializers::Adapter::Attributes,
+        'json_api' => ActiveModelSerializers::Adapter::JsonApi
       }
       actual = ActiveModelSerializers::Adapter.adapter_map
       assert_equal actual, expected_adapter_map
     end
 
     def test_adapters
-      assert_equal ActiveModelSerializers::Adapter.adapters.sort, [
-        'attributes'.freeze,
-        'json'.freeze,
-        'json_api'.freeze,
-        'null'.freeze
+      assert_equal ActiveModelSerializers::Adapter.adapters.sort, %w[
+        attributes
+        json
+        json_api
+        null
       ]
     end
 
     def test_lookup_adapter_by_string_name
-      assert_equal ActiveModelSerializers::Adapter.lookup('json'.freeze), ActiveModelSerializers::Adapter::Json
+      assert_equal ActiveModelSerializers::Adapter.lookup('json'), ActiveModelSerializers::Adapter::Json
     end
 
     def test_lookup_adapter_by_symbol_name
@@ -131,7 +131,7 @@ module ActiveModelSerializers
     def test_lookup_adapter_from_environment_registers_adapter
       ActiveModelSerializers::Adapter.const_set(:AdapterFromEnvironment, Class.new)
       klass = ::ActiveModelSerializers::Adapter::AdapterFromEnvironment
-      name = 'adapter_from_environment'.freeze
+      name = 'adapter_from_environment'
       assert_equal ActiveModelSerializers::Adapter.lookup(name), klass
       assert ActiveModelSerializers::Adapter.adapters.include?(name)
     ensure
@@ -154,7 +154,7 @@ module ActiveModelSerializers
       new_adapter_name  = :foo
       new_adapter_klass = Class.new
       ActiveModelSerializers::Adapter.register(new_adapter_name, new_adapter_klass)
-      assert ActiveModelSerializers::Adapter.adapters.include?('foo'.freeze)
+      assert ActiveModelSerializers::Adapter.adapters.include?('foo')
       assert ActiveModelSerializers::Adapter.lookup(:foo), new_adapter_klass
     ensure
       ActiveModelSerializers::Adapter.adapter_map.delete(new_adapter_name.to_s)
@@ -166,7 +166,7 @@ module ActiveModelSerializers
       ActiveModelSerializers::Adapter::Base.inherited(my_adapter)
       assert_equal ActiveModelSerializers::Adapter.lookup(:my_adapter), my_adapter
     ensure
-      ActiveModelSerializers::Adapter.adapter_map.delete('my_adapter'.freeze)
+      ActiveModelSerializers::Adapter.adapter_map.delete('my_adapter')
       Object.send(:remove_const, :MyAdapter)
     end
 
@@ -177,7 +177,7 @@ module ActiveModelSerializers
       ActiveModelSerializers::Adapter::Base.inherited(my_adapter)
       assert_equal ActiveModelSerializers::Adapter.lookup(:'my_namespace/my_adapter'), my_adapter
     ensure
-      ActiveModelSerializers::Adapter.adapter_map.delete('my_namespace/my_adapter'.freeze)
+      ActiveModelSerializers::Adapter.adapter_map.delete('my_namespace/my_adapter')
       MyNamespace.send(:remove_const, :MyAdapter)
       Object.send(:remove_const, :MyNamespace)
     end
@@ -192,8 +192,8 @@ module ActiveModelSerializers
       assert_equal ActiveModelSerializers::Adapter.lookup(:my_adapter), my_adapter
       assert_equal ActiveModelSerializers::Adapter.lookup(:my_subclassed_adapter), my_subclassed_adapter
     ensure
-      ActiveModelSerializers::Adapter.adapter_map.delete('my_adapter'.freeze)
-      ActiveModelSerializers::Adapter.adapter_map.delete('my_subclassed_adapter'.freeze)
+      ActiveModelSerializers::Adapter.adapter_map.delete('my_adapter')
+      ActiveModelSerializers::Adapter.adapter_map.delete('my_subclassed_adapter')
       Object.send(:remove_const, :MyAdapter)
       Object.send(:remove_const, :MySubclassedAdapter)
     end

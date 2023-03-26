@@ -5,11 +5,11 @@ require 'generators/rails/resource_override'
 require 'generators/rails/serializer_generator'
 
 class SerializerGeneratorTest < Rails::Generators::TestCase
-  destination File.expand_path('../../../tmp/generators', __FILE__)
+  destination File.expand_path('../../tmp/generators', __dir__)
   setup :prepare_destination
 
   tests Rails::Generators::SerializerGenerator
-  arguments %w(account name:string description:text business:references)
+  arguments %w[account name:string description:text business:references]
 
   def test_generates_a_serializer
     run_generator

@@ -23,7 +23,7 @@ module ActiveModelSerializers
         adapter = ActiveModelSerializers::Adapter::Attributes.new(serializer)
 
         assert_equal({ first_name: 'Arthur', last_name: 'Dent' },
-          adapter.serializable_hash)
+                     adapter.serializable_hash)
       end
 
       def test_serializable_hash_with_transform_key_casing
@@ -35,7 +35,7 @@ module ActiveModelSerializers
         )
 
         assert_equal({ firstName: 'Arthur', lastName: 'Dent' },
-          adapter.serializable_hash)
+                     adapter.serializable_hash)
       end
     end
   end

@@ -10,7 +10,7 @@ module ActiveModel
       class << self
         extend ActiveModelSerializers::Deprecate
 
-        DEPRECATED_METHODS = [:create, :adapter_class, :adapter_map, :adapters, :register, :lookup].freeze
+        DEPRECATED_METHODS = %i[create adapter_class adapter_map adapters register lookup].freeze
         DEPRECATED_METHODS.each do |method|
           delegate_and_deprecate method, ActiveModelSerializers::Adapter
         end

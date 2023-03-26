@@ -3,7 +3,7 @@
 begin
   require 'rubocop'
   require 'rubocop/rake_task'
-rescue LoadError # rubocop:disable Lint/HandleExceptions
+rescue LoadError
 else
   require 'rbconfig'
   # https://github.com/bundler/bundler/blob/1b3eb2465a/lib/bundler/constants.rb#L2

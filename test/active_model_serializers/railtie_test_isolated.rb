@@ -17,15 +17,15 @@ class RailtieTest < ActiveSupport::TestCase
 
     test 'mixes ActionController::Serialization into ActionController::Base' do
       assert ActionController.const_defined?(:Serialization),
-        "ActionController::Serialization should be defined, but isn't"
+             "ActionController::Serialization should be defined, but isn't"
       assert ::ActionController::Base.included_modules.include?(::ActionController::Serialization),
-        "ActionController::Serialization should be included in ActionController::Base, but isn't"
+             "ActionController::Serialization should be included in ActionController::Base, but isn't"
     end
 
     test 'prepares url_helpers for SerializationContext' do
       assert ActiveModelSerializers::SerializationContext.url_helpers.respond_to? :url_for
       assert_equal Rails.application.routes.default_url_options,
-        ActiveModelSerializers::SerializationContext.default_url_options
+                   ActiveModelSerializers::SerializationContext.default_url_options
     end
 
     test 'sets the ActiveModelSerializers.logger to Rails.logger' do
@@ -51,7 +51,7 @@ class RailtieTest < ActiveSupport::TestCase
 
     test 'does not mix ActionController::Serialization into ActionController::Base' do
       refute ActionController.const_defined?(:Serialization),
-        'ActionController::Serialization should not be defined, but is'
+             'ActionController::Serialization should not be defined, but is'
     end
 
     test 'has its own logger at ActiveModelSerializers.logger' do

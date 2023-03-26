@@ -7,6 +7,7 @@ module ActiveModel
       class Blog < ActiveModelSerializers::Model
         attributes :id
       end
+
       class BlogSerializer < ActiveModel::Serializer
         type 'blog'
         attributes :id
@@ -425,20 +426,24 @@ module ActiveModel
       end
       # rubocop:enable Metrics/AbcSize
     end
+
     class ThreadedReflectionTest < ActiveSupport::TestCase
       class Post < ::Model
         attributes :id, :title, :body
         associations :comments
       end
+
       class Comment < ::Model
         attributes :id, :body
         associations :post
       end
+
       class CommentSerializer < ActiveModel::Serializer
         type 'comment'
         attributes :id, :body
         has_one :post
       end
+
       class PostSerializer < ActiveModel::Serializer
         type 'post'
         attributes :id, :title, :body

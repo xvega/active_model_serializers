@@ -25,7 +25,7 @@ module ActiveModelSerializers
           @serializer = PostPreviewSerializer.new(@post)
           @adapter = ActiveModelSerializers::Adapter::JsonApi.new(
             @serializer,
-            include: [:comments, :author]
+            include: %i[comments author]
           )
         end
 

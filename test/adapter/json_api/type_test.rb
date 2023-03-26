@@ -48,6 +48,7 @@ module ActiveModelSerializers
           assert_equal(expected_type, hash.fetch(:data).fetch(:type))
         end
       end
+
       class ResourceIdentifierTest < ActiveSupport::TestCase
         class WithDefinedTypeSerializer < ActiveModel::Serializer
           type 'with_defined_types'

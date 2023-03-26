@@ -10,7 +10,7 @@ module ActiveModelSerializers
 
     def test_logger_can_be_set
       original_logger = ActiveModelSerializers.logger
-      logger = Logger.new(STDOUT)
+      logger = Logger.new($stdout)
 
       ActiveModelSerializers.logger = logger
 

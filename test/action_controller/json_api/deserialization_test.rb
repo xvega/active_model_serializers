@@ -15,7 +15,7 @@ module ActionController
           def render_polymorphic_parsed_payload
             parsed_hash = ActiveModelSerializers::Deserialization.jsonapi_parse(
               params,
-              polymorphic: [:restriction_for, :restricted_to]
+              polymorphic: %i[restriction_for restricted_to]
             )
             render json: parsed_hash
           end
@@ -102,8 +102,8 @@ module ActionController
             'image_size' => '1024',
             'author_id' => nil,
             'photographer_id' => '9',
-            'comment_ids' => %w(1 2),
-            'related_image_ids' => %w(7 8)
+            'comment_ids' => %w[1 2],
+            'related_image_ids' => %w[7 8]
           }
 
           assert_equal(expected, response)

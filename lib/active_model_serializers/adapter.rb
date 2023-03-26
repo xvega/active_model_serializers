@@ -6,7 +6,8 @@ module ActiveModelSerializers
     ADAPTER_MAP = {} # rubocop:disable Style/MutableConstant
     private_constant :ADAPTER_MAP if defined?(private_constant)
 
-    class << self # All methods are class functions
+    # All methods are class functions
+    class << self
       # :nocov:
       def new(*args)
         fail ArgumentError, 'Adapters inherit from Adapter::Base.' \
@@ -50,7 +51,7 @@ module ActiveModelSerializers
       #   so that registering 'ActiveModelSerializers::Adapter::Json' and
       #   'Json' will both register as 'json'.
       def register(name, klass = name)
-        name = name.to_s.gsub(/\AActiveModelSerializers::Adapter::/, ''.freeze)
+        name = name.to_s.gsub(/\AActiveModelSerializers::Adapter::/, '')
         adapter_map[name.underscore] = klass
         self
       end
@@ -65,6 +66,7 @@ module ActiveModelSerializers
       def lookup(adapter)
         # 1. return if is a class
         return adapter if adapter.is_a?(Class)
+
         adapter_name = adapter.to_s.underscore
         # 2. return if registered
         adapter_map.fetch(adapter_name) do
@@ -83,7 +85,7 @@ module ActiveModelSerializers
       def find_by_name(adapter_name)
         adapter_name = adapter_name.to_s.classify.tr('API', 'Api')
         "ActiveModelSerializers::Adapter::#{adapter_name}".safe_constantize ||
-          "ActiveModelSerializers::Adapter::#{adapter_name.pluralize}".safe_constantize or # rubocop:disable Style/AndOr
+          "ActiveModelSerializers::Adapter::#{adapter_name.pluralize}".safe_constantize or
           fail UnknownAdapterError
       end
       private :find_by_name

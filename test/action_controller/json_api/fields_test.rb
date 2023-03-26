@@ -10,12 +10,15 @@ module ActionController
           class AuthorWithName < Author
             attributes :first_name, :last_name
           end
+
           class AuthorWithNameSerializer < AuthorSerializer
             type 'authors'
           end
+
           class PostWithPublishAt < Post
             attributes :publish_at
           end
+
           class PostWithPublishAtSerializer < ActiveModel::Serializer
             type 'posts'
             attributes :title, :body, :publish_at

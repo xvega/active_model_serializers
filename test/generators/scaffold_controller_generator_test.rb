@@ -4,11 +4,11 @@ require 'test_helper'
 require 'generators/rails/resource_override'
 
 class ResourceGeneratorTest < Rails::Generators::TestCase
-  destination File.expand_path('../../../tmp/generators', __FILE__)
+  destination File.expand_path('../../tmp/generators', __dir__)
   setup :prepare_destination, :copy_routes
 
   tests Rails::Generators::ResourceGenerator
-  arguments %w(account)
+  arguments %w[account]
 
   def test_serializer_file_is_generated
     run_generator

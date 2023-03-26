@@ -21,6 +21,7 @@ module AmsBench
       end
     end
   end
+
   class PrimaryResourceSerializer < ActiveModel::Serializer
     attributes :title, :body
 
@@ -59,25 +60,25 @@ configurable = lambda do
   Benchmark.ams('Configurable Lookup Chain', time: time, disable_gc: disable_gc, &serialization)
 end
 
-old = lambda do
-  clear_cache
-  module ActiveModel
-    class Serializer
-      def self.serializer_lookup_chain_for(klass, namespace = nil)
-        chain = []
+module ActiveModel
+  class Serializer
+    def self.serializer_lookup_chain_for(klass, namespace = nil)
+      chain = []
 
-        resource_class_name = klass.name.demodulize
-        resource_namespace = klass.name.deconstantize
-        serializer_class_name = "#{resource_class_name}Serializer"
+      resource_class_name = klass.name.demodulize
+      resource_namespace = klass.name.deconstantize
+      serializer_class_name = "#{resource_class_name}Serializer"
 
-        chain.push("#{namespace}::#{serializer_class_name}") if namespace
-        chain.push("#{name}::#{serializer_class_name}") if self != ActiveModel::Serializer
-        chain.push("#{resource_namespace}::#{serializer_class_name}")
-        chain
-      end
+      chain.push("#{namespace}::#{serializer_class_name}") if namespace
+      chain.push("#{name}::#{serializer_class_name}") if self != ActiveModel::Serializer
+      chain.push("#{resource_namespace}::#{serializer_class_name}")
+      chain
     end
   end
+end
 
+old = lambda do
+  clear_cache
   Benchmark.ams('Old Lookup Chain (v0.10)', time: time, disable_gc: disable_gc, &serialization)
 end
 

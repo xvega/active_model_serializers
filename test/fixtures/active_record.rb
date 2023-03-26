@@ -3,6 +3,7 @@
 require 'active_record'
 
 ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
+# rubocop:disable Metrics/BlockLength
 ActiveRecord::Schema.define do
   self.verbose = false
   create_table :posts, force: true do |t|
@@ -43,12 +44,14 @@ ActiveRecord::Schema.define do
     t.timestamps null: false
   end
 end
+# rubocop:enable Metrics/BlockLength
 
 module ARModels
   class Post < ActiveRecord::Base
     has_many :comments
     belongs_to :author
   end
+
   class PostSerializer < ActiveModel::Serializer
     attributes :id, :title, :body
 
@@ -60,6 +63,7 @@ module ARModels
     belongs_to :post
     belongs_to :author
   end
+
   class CommentSerializer < ActiveModel::Serializer
     attributes :id, :contents
 
@@ -69,6 +73,7 @@ module ARModels
   class Author < ActiveRecord::Base
     has_many :posts
   end
+
   class AuthorSerializer < ActiveModel::Serializer
     attributes :id, :name
 
@@ -89,6 +94,7 @@ class ObjectTag < ActiveRecord::Base
   belongs_to :poly_tag
   belongs_to :taggable, polymorphic: true
 end
+
 class PolymorphicObjectTagSerializer < ActiveModel::Serializer
   attributes :id
   belongs_to :taggable, serializer: PolymorphicSimpleSerializer, polymorphic: true
@@ -97,6 +103,7 @@ end
 class PolyTag < ActiveRecord::Base
   has_many :object_tags
 end
+
 class PolymorphicTagSerializer < ActiveModel::Serializer
   attributes :id, :phrase
   has_many :object_tags, serializer: PolymorphicObjectTagSerializer
@@ -106,9 +113,11 @@ class Picture < ActiveRecord::Base
   belongs_to :imageable, polymorphic: true
   has_many :object_tags, as: :taggable
 end
+
 class PolymorphicHasManySerializer < ActiveModel::Serializer
   attributes :id, :name
 end
+
 class PolymorphicBelongsToSerializer < ActiveModel::Serializer
   attributes :id, :title
   belongs_to :imageable, serializer: PolymorphicHasManySerializer, polymorphic: true

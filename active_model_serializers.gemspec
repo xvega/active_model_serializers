@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-# coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'active_model/serializer/version'
 
@@ -42,8 +42,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'minitest', ['~> 5.0', '< 5.11']
   # 'thread_safe'
 
-  spec.add_runtime_dependency 'jsonapi-renderer', ['>= 0.1.1.beta1', '< 0.3']
   spec.add_runtime_dependency 'case_transform', '>= 0.2'
+  spec.add_runtime_dependency 'jsonapi-renderer', ['>= 0.1.1.beta1', '< 0.3']
 
   spec.add_development_dependency 'activerecord', rails_versions
   # arel
@@ -55,8 +55,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'will_paginate', '~> 3.0', '>= 3.0.7'
 
   spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'timecop', '~> 0.7'
   spec.add_development_dependency 'grape', '>= 0.13'
   spec.add_development_dependency 'json_schema'
   spec.add_development_dependency 'rake', '>= 10.0'
+  spec.add_development_dependency 'timecop', '~> 0.7'
 end

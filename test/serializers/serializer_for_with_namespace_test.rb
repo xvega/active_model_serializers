@@ -9,6 +9,7 @@ module ActiveModel
         attributes :title, :author_name
         associations :publisher, :pages
       end
+
       class Ebook < Book; end
       class Page < ::Model; attributes :number, :text end
       class Publisher < ::Model; attributes :name end

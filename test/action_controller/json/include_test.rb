@@ -6,9 +6,9 @@ module ActionController
   module Serialization
     class Json
       class IncludeTest < ActionController::TestCase
-        INCLUDE_STRING = 'posts.comments'.freeze
+        INCLUDE_STRING = 'posts.comments'
         INCLUDE_HASH = { posts: :comments }.freeze
-        DEEP_INCLUDE = 'posts.comments.author'.freeze
+        DEEP_INCLUDE = 'posts.comments.author'
 
         class IncludeTestController < ActionController::Base
           def setup_data
@@ -128,6 +128,7 @@ module ActionController
           end
         end
 
+        # rubocop:disable Metrics/BlockLength
         def test_render_with_recursive_default_includes
           with_default_includes '**' do
             get :render_without_recursive_relationships
@@ -148,7 +149,7 @@ module ActionController
                       'id' => 13,
                       'body' => 'Commentary',
                       'post' => nil, # not set to avoid infinite recursion
-                      'author' => nil, # not set to avoid infinite recursion
+                      'author' => nil # not set to avoid infinite recursion
                     }
                   ],
                   'blog' => {
@@ -164,6 +165,7 @@ module ActionController
             assert_equal(expected, response)
           end
         end
+        # rubocop:enable Metrics/BlockLength
 
         def test_render_with_includes_overrides_default_includes
           with_default_includes '' do

@@ -9,9 +9,11 @@ module ActiveModel
       class Parent < ActiveModelSerializers::Model
         attributes :id
       end
+
       class Child < Parent
         attributes :name
       end
+
       class ParentSerializer < ActiveModel::Serializer
         attributes :$id
 
@@ -19,6 +21,7 @@ module ActiveModel
           object.id
         end
       end
+
       class ChildSerializer < ParentSerializer
         attributes :name
       end
@@ -34,6 +37,7 @@ module ActiveModel
       class ErrorResponse < ActiveModelSerializers::Model
         attributes :error
       end
+
       class ApplicationSerializer < ActiveModel::Serializer
         attributes :status
 
@@ -41,15 +45,13 @@ module ActiveModel
           object.try(:errors).blank? && object.try(:error).blank?
         end
       end
+
       class ErrorResponseSerializer < ApplicationSerializer
         attributes :error
       end
+
       class ErrorResponseWithSuperSerializer < ApplicationSerializer
         attributes :error
-
-        def success
-          super
-        end
       end
 
       def test_child_serializer_with_error_attribute

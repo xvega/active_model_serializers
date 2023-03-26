@@ -9,6 +9,7 @@ module ActiveModel
     # @api private
     Association = Struct.new(:reflection, :association_options) do
       attr_reader :lazy_association
+
       delegate :object, :include_data?, :virtual_value, :collection?, to: :lazy_association
 
       def initialize(*)
@@ -45,13 +46,14 @@ module ActiveModel
       end
 
       def polymorphic?
-        true == reflection_options[:polymorphic]
+        reflection_options[:polymorphic] == true
       end
 
       # @api private
       def serializable_hash(adapter_options, adapter_instance)
         association_serializer = lazy_association.serializer
         return virtual_value if virtual_value
+
         association_object = association_serializer && association_serializer.object
         return unless association_object
 
@@ -64,8 +66,6 @@ module ActiveModel
 
         serialization
       end
-
-      private
 
       delegate :reflection_options, to: :lazy_association
     end

@@ -20,6 +20,7 @@ module ActiveModelSerializers
 
       def fields_to_fieldset(fields)
         return fields if fields.nil?
+
         resource_fields = []
         relationship_fields = {}
         fields.each do |field|

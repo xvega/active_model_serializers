@@ -80,7 +80,7 @@ end
 Rails.configuration.serializers << CachingPrimaryResourceSerializer
 
 class FragmentCachingHasOneRelationshipSerializer < HasOneRelationshipSerializer
-  cache key: 'writer', only: [:first_name, :last_name], skip_digest: true
+  cache key: 'writer', only: %i[first_name last_name], skip_digest: true
 end
 Rails.configuration.serializers << FragmentCachingHasOneRelationshipSerializer
 
@@ -195,7 +195,7 @@ else
     end
 
     def read_attribute_for_serialization(key)
-      if key == :id || key == 'id'
+      if [:id, 'id'].include?(key)
         attributes.fetch(key) { id }
       else
         attributes[key]

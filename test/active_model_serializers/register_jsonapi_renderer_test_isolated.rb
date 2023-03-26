@@ -14,7 +14,7 @@ class JsonApiRendererTest < ActionDispatch::IntegrationTest
     end
 
     def render_with_jsonapi_renderer
-      permitted_params = params.permit(data: [:id, :type, attributes: [:name]])
+      permitted_params = params.permit(data: [:id, :type, { attributes: [:name] }])
       permitted_params = permitted_params.to_h.with_indifferent_access
       attributes =
         if permitted_params[:data]
@@ -67,7 +67,7 @@ class JsonApiRendererTest < ActionDispatch::IntegrationTest
 
       Rails.application.routes.draw do
         ActiveSupport::Deprecation.silence do
-          match ':action', to: TestController, via: [:get, :post]
+          match ':action', to: TestController, via: %i[get post]
         end
       end
       define_author_model_and_serializer
@@ -113,7 +113,7 @@ class JsonApiRendererTest < ActionDispatch::IntegrationTest
 
       Rails.application.routes.draw do
         ActiveSupport::Deprecation.silence do
-          match ':action', to: TestController, via: [:get, :post]
+          match ':action', to: TestController, via: %i[get post]
         end
       end
       define_author_model_and_serializer

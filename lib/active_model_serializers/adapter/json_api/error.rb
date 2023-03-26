@@ -4,7 +4,6 @@ module ActiveModelSerializers
   module Adapter
     class JsonApi < Base
       module Error
-        # rubocop:disable Style/AsciiComments
         UnknownSourceTypeError = Class.new(ArgumentError)
 
         # Builds a JSON API Errors Object
@@ -15,7 +14,7 @@ module ActiveModelSerializers
         def self.resource_errors(error_serializer, options)
           error_serializer.as_json.flat_map do |attribute_name, attribute_errors|
             attribute_name = JsonApi.send(:transform_key_casing!, attribute_name,
-              options)
+                                          options)
             attribute_error_objects(attribute_name, attribute_errors)
           end
         end

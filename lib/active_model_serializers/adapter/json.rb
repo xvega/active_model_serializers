@@ -16,7 +16,7 @@ module ActiveModelSerializers
       end
 
       def meta_key
-        instance_options.fetch(:meta_key, 'meta'.freeze)
+        instance_options.fetch(:meta_key, 'meta')
       end
     end
   end

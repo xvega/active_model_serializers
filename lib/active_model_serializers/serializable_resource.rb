@@ -4,7 +4,7 @@ require 'set'
 
 module ActiveModelSerializers
   class SerializableResource
-    ADAPTER_OPTION_KEYS = Set.new([:include, :fields, :adapter, :meta, :meta_key, :links, :serialization_context, :key_transform])
+    ADAPTER_OPTION_KEYS = Set.new(%i[include fields adapter meta meta_key links serialization_context key_transform])
     include ActiveModelSerializers::Logging
 
     delegate :serializable_hash, :as_json, :to_json, to: :adapter
@@ -40,6 +40,7 @@ module ActiveModelSerializers
 
     def find_adapter
       return resource unless serializer?
+
       adapter = catch :no_serializer do
         ActiveModelSerializers::Adapter.create(serializer_instance, adapter_opts)
       end
@@ -59,9 +60,7 @@ module ActiveModelSerializers
           @serializer = serializer_opts.delete(:serializer)
           @serializer ||= ActiveModel::Serializer.serializer_for(resource, serializer_opts)
 
-          if serializer_opts.key?(:each_serializer)
-            serializer_opts[:serializer] = serializer_opts.delete(:each_serializer)
-          end
+          serializer_opts[:serializer] = serializer_opts.delete(:each_serializer) if serializer_opts.key?(:each_serializer)
           @serializer
         end
     end

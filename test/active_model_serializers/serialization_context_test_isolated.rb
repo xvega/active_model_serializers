@@ -39,7 +39,7 @@ class SerializationContextTest < ActiveSupport::TestCase
 
     test 'default_url_options returns Rails.application.routes.default_url_options' do
       assert_equal Rails.application.routes.default_url_options,
-        ActiveModelSerializers::SerializationContext.default_url_options
+                   ActiveModelSerializers::SerializationContext.default_url_options
     end
   end
 

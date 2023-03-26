@@ -9,9 +9,7 @@ module ActiveModelSerializers
       config.action_controller.perform_caching = true
       config.action_controller.cache_store = :memory_store
 
-      if Rails::VERSION::MAJOR >= 6
-        config.action_dispatch.return_only_media_type_on_content_type = true
-      end
+      config.action_dispatch.return_only_media_type_on_content_type = true if Rails::VERSION::MAJOR >= 6
 
       config.filter_parameters += [:password]
 

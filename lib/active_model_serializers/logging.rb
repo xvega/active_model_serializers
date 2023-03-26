@@ -7,7 +7,7 @@
 #
 module ActiveModelSerializers
   module Logging
-    RENDER_EVENT = 'render.active_model_serializers'.freeze
+    RENDER_EVENT = 'render.active_model_serializers'
     extend ActiveSupport::Concern
 
     included do
@@ -75,11 +75,9 @@ module ActiveModelSerializers
       end
     end
 
-    def notify_render(*)
+    def notify_render(*, &block)
       event_name = RENDER_EVENT
-      ActiveSupport::Notifications.instrument(event_name, notify_render_payload) do
-        yield
-      end
+      ActiveSupport::Notifications.instrument(event_name, notify_render_payload, &block)
     end
 
     def notify_render_payload
@@ -91,17 +89,17 @@ module ActiveModelSerializers
 
     private
 
-    def tag_logger(*tags)
+    def tag_logger(*tags, &block)
       if ActiveModelSerializers.logger.respond_to?(:tagged)
-        tags.unshift 'active_model_serializers'.freeze unless logger_tagged_by_active_model_serializers?
-        ActiveModelSerializers.logger.tagged(*tags) { yield }
+        tags.unshift 'active_model_serializers' unless logger_tagged_by_active_model_serializers?
+        ActiveModelSerializers.logger.tagged(*tags, &block)
       else
         yield
       end
     end
 
     def logger_tagged_by_active_model_serializers?
-      ActiveModelSerializers.logger.formatter.current_tags.include?('active_model_serializers'.freeze)
+      ActiveModelSerializers.logger.formatter.current_tags.include?('active_model_serializers')
     end
 
     class LogSubscriber < ActiveSupport::LogSubscriber

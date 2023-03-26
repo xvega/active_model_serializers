@@ -130,10 +130,13 @@ module ActiveModel
       #      link :self, '//example.com/link_author/relationships/tags'
       #      include_data :if_sideloaded
       #    end
+
+      # rubocop:disable Style/OptionalBooleanParameter
       def include_data(value = true)
         options[:include_data_setting] = value
         :nil
       end
+      # rubocop:enable Style/OptionalBooleanParameter
 
       def collection?
         false

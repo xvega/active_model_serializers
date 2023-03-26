@@ -11,6 +11,7 @@ module ActiveModelSerializers
       # To confirm error is raised when cache_key is not set and cache_key option not passed to cache
       undef_method :cache_key
     end
+
     class ArticleSerializer < ActiveModel::Serializer
       cache only: [:place], skip_digest: true
       attributes :title
@@ -20,6 +21,7 @@ module ActiveModelSerializers
       attributes :id, :name
       associations :posts, :bio, :roles
     end
+
     # Instead of a primitive cache key (i.e. a string), this class
     # returns a list of objects that require to be expanded themselves.
     class AuthorWithExpandableCacheElements < Author
@@ -27,6 +29,7 @@ module ActiveModelSerializers
       # between instances, hence not a Struct.
       class HasCacheKey
         attr_reader :cache_key
+
         def initialize(cache_key)
           @cache_key = cache_key
         end
@@ -43,10 +46,12 @@ module ActiveModelSerializers
         ]
       end
     end
+
     class UncachedAuthor < Author
       # To confirm cache_key is set using updated_at and cache_key option passed to cache
       undef_method :cache_key
     end
+
     class AuthorSerializer < ActiveModel::Serializer
       cache key: 'writer', skip_digest: true
       attributes :id, :name
@@ -55,6 +60,7 @@ module ActiveModelSerializers
       has_many :roles
       has_one :bio
     end
+
     class AuthorSerializerWithCache < ActiveModel::Serializer
       cache
 
@@ -65,6 +71,7 @@ module ActiveModelSerializers
       attributes :name
       associations :writer
     end
+
     class BlogSerializer < ActiveModel::Serializer
       cache key: 'blog'
       attributes :id, :name
@@ -81,6 +88,7 @@ module ActiveModelSerializers
         "comment/#{id}"
       end
     end
+
     class CommentSerializer < ActiveModel::Serializer
       cache expires_in: 1.day, skip_digest: true
       attributes :id, :body
@@ -92,6 +100,7 @@ module ActiveModelSerializers
       attributes :id, :title, :body
       associations :author, :comments, :blog
     end
+
     class PostSerializer < ActiveModel::Serializer
       cache key: 'post', expires_in: 0.1, skip_digest: true
       attributes :id, :title, :body
@@ -105,8 +114,9 @@ module ActiveModelSerializers
       attributes :name, :description, :special_attribute
       associations :author
     end
+
     class RoleSerializer < ActiveModel::Serializer
-      cache only: [:name, :slug], skip_digest: true
+      cache only: %i[name slug], skip_digest: true
       attributes :id, :name, :description
       attribute :friendly_id, key: :slug
       belongs_to :author
@@ -115,11 +125,13 @@ module ActiveModelSerializers
         "#{object.name}-#{object.id}"
       end
     end
+
     class InheritedRoleSerializer < RoleSerializer
-      cache key: 'inherited_role', only: [:name, :special_attribute]
+      cache key: 'inherited_role', only: %i[name special_attribute]
       attribute :special_attribute
     end
 
+    # rubocop:disable Metrics/BlockLength
     setup do
       cache_store.clear
       @comment        = Comment.new(id: 1, body: 'ZOMG A COMMENT')
@@ -150,6 +162,7 @@ module ActiveModelSerializers
       @comment_serializer  = CommentSerializer.new(@comment)
       @blog_serializer     = BlogSerializer.new(@blog)
     end
+    # rubocop:enable Metrics/BlockLength
 
     def test_expiring_of_cache_at_update_of_record
       original_cache_versioning = :none
@@ -298,7 +311,7 @@ module ActiveModelSerializers
     end
 
     def test_fragment_cache_definition
-      assert_equal([:name, :slug], @role_serializer.class._cache_only)
+      assert_equal(%i[name slug], @role_serializer.class._cache_only)
       assert_equal([:content], @bio_serializer.class._cache_except)
     end
 
@@ -317,6 +330,7 @@ module ActiveModelSerializers
       end
     end
 
+    # rubocop:disable Metrics/AbcSize
     def test_associations_cache_when_updated
       Timecop.freeze(Time.current) do
         # Generate a new Cache of Post object and each objects related to it.
@@ -343,6 +357,7 @@ module ActiveModelSerializers
         assert_equal(@post_serializer.attributes, cache_store.fetch(key))
       end
     end
+    # rubocop:enable Metrics/AbcSize
 
     def test_fragment_fetch_with_virtual_associations
       expected_result = {
@@ -742,6 +757,7 @@ module ActiveModelSerializers
 
     def reset_cache_digest(serializer)
       return unless serializer.class.instance_variable_defined?(:@_cache_digest)
+
       serializer.class.remove_instance_variable(:@_cache_digest)
     end
   end

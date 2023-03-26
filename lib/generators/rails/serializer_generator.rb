@@ -3,7 +3,7 @@
 module Rails
   module Generators
     class SerializerGenerator < NamedBase
-      source_root File.expand_path('../templates', __FILE__)
+      source_root File.expand_path('templates', __dir__)
       check_class_collision suffix: 'Serializer'
 
       argument :attributes, type: :array, default: [], banner: 'field:type field:type'

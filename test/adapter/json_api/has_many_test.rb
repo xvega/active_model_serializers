@@ -10,6 +10,7 @@ module ActiveModelSerializers
           attributes :id, :name
         end
 
+        # rubocop:disable Metrics/AbcSize
         def setup
           ActionController::Base.cache_store.clear
           @author = Author.new(id: 1, name: 'Steve K.')
@@ -39,6 +40,7 @@ module ActiveModelSerializers
 
           @virtual_value = VirtualValue.new(id: 1)
         end
+        # rubocop:enable Metrics/AbcSize
 
         def test_includes_comment_ids
           expected = { data: [{ type: 'comments', id: '1' }, { type: 'comments', id: '2' }] }
@@ -94,7 +96,7 @@ module ActiveModelSerializers
         end
 
         def test_limit_fields_of_linked_comments
-          @adapter = ActiveModelSerializers::Adapter::JsonApi.new(@serializer, include: [:comments], fields: { comment: [:id, :post, :author] })
+          @adapter = ActiveModelSerializers::Adapter::JsonApi.new(@serializer, include: [:comments], fields: { comment: %i[id post author] })
           expected = [{
             id: '1',
             type: 'comments',

@@ -6,11 +6,14 @@ module ActiveModel
   class Serializer
     class CollectionSerializerTest < ActiveSupport::TestCase
       class SingularModel < ::Model; end
+
       class SingularModelSerializer < ActiveModel::Serializer
       end
+
       class HasManyModel < ::Model
         associations :singular_models
       end
+
       class HasManyModelSerializer < ActiveModel::Serializer
         has_many :singular_models
 
@@ -18,6 +21,7 @@ module ActiveModel
           instance_options
         end
       end
+
       class MessagesSerializer < ActiveModel::Serializer
         type 'messages'
       end

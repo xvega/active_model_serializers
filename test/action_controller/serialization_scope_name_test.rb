@@ -9,12 +9,15 @@ module SerializationScopeTesting
       admin
     end
   end
+
   class Comment < ActiveModelSerializers::Model
     attributes :id, :body
   end
+
   class Post < ActiveModelSerializers::Model
     attributes :id, :title, :body, :comments
   end
+
   class PostSerializer < ActiveModel::Serializer
     attributes :id, :title, :body, :comments
 
@@ -34,6 +37,7 @@ module SerializationScopeTesting
       'post'
     end
   end
+
   class PostTestController < ActionController::Base
     attr_writer :current_user
 
@@ -61,6 +65,7 @@ module SerializationScopeTesting
       PostSerializer
     end
   end
+
   class PostViewContextSerializer < PostSerializer
     def body
       "The 'scope' is the 'view_context': #{scope == view_context}"
@@ -74,6 +79,7 @@ module SerializationScopeTesting
       end
     end
   end
+
   class DefaultScopeTest < ActionController::TestCase
     tests PostTestController
 
@@ -116,6 +122,7 @@ module SerializationScopeTesting
       assert_equal expected_json, @response.body
     end
   end
+
   class SerializationScopeTest < ActionController::TestCase
     class PostViewContextTestController < PostTestController
       serialization_scope :view_context
@@ -166,6 +173,7 @@ module SerializationScopeTesting
       assert_equal expected_json, @response.body
     end
   end
+
   class NilSerializationScopeTest < ActionController::TestCase
     class PostViewContextTestController < ActionController::Base
       serialization_scope nil

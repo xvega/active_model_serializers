@@ -109,6 +109,7 @@ module ActiveModelSerializers
         #
         # @api private
         # rubocop:disable Metrics/CyclomaticComplexity
+        # rubocop:disable Metrics/PerceivedComplexity
         def validate_payload(payload)
           unless payload.is_a?(Hash)
             yield payload, 'Expected hash'
@@ -134,12 +135,11 @@ module ActiveModelSerializers
           end
 
           relationships.each do |(key, value)|
-            unless value.is_a?(Hash) && value.key?('data')
-              yield payload, { data: { relationships: { key => 'Expected hash with :data key' } } }
-            end
+            yield payload, { data: { relationships: { key => 'Expected hash with :data key' } } } unless value.is_a?(Hash) && value.key?('data')
           end
         end
         # rubocop:enable Metrics/CyclomaticComplexity
+        # rubocop:enable Metrics/PerceivedComplexity
 
         # @api private
         def filter_fields(fields, options)

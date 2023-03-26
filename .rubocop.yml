@@ -8,9 +8,7 @@ AllCops:
   # https://github.com/bbatsov/rubocop/blob/e8680418b351491e111a18cf5b453fc07a3c5239/config/default.yml#L60-L77
   UseCache: true
   CacheRootDirectory: tmp
-
-Rails:
-  Enabled: true
+  require: rubocop-rails
 
 Lint/NestedMethodDefinition:
   Enabled: false
@@ -43,7 +41,7 @@ Metrics/MethodLength:
 Metrics/PerceivedComplexity:
   Max: 9 # TODO: Lower to 7
 
-Style/AlignParameters:
+Layout/ParameterAlignment:
   EnforcedStyle: with_fixed_indentation
 
 Style/ClassAndModuleChildren:
@@ -73,7 +71,10 @@ Style/BlockDelimiters:
 Style/SignalException:
   EnforcedStyle: semantic
 
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: no_comma
+
+Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: no_comma
 
 Style/ConditionalAssignment:

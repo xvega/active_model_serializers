@@ -16,29 +16,29 @@ module ActiveModel
       end
 
       def test_attributes_definition
-        assert_equal([:name, :description],
-          @profile_serializer.class._attributes)
+        assert_equal(%i[name description],
+                     @profile_serializer.class._attributes)
       end
 
       def test_attributes_inheritance_definition
-        assert_equal([:id, :body], @serializer_klass._attributes)
+        assert_equal(%i[id body], @serializer_klass._attributes)
       end
 
       def test_attributes_inheritance
         serializer = @serializer_klass.new(@comment)
         assert_equal({ id: 1, body: 'ZOMG!!' },
-          serializer.attributes)
+                     serializer.attributes)
       end
 
       def test_attribute_inheritance_with_new_attribute_definition
-        assert_equal([:id, :body, :date, :likes], @serializer_klass_with_new_attributes._attributes)
-        assert_equal([:id, :body], CommentSerializer._attributes)
+        assert_equal(%i[id body date likes], @serializer_klass_with_new_attributes._attributes)
+        assert_equal(%i[id body], CommentSerializer._attributes)
       end
 
       def test_attribute_inheritance_with_new_attribute
         serializer = @serializer_klass_with_new_attributes.new(@comment)
         assert_equal({ id: 1, body: 'ZOMG!!', date: '2015', likes: nil },
-          serializer.attributes)
+                     serializer.attributes)
       end
 
       def test_multiple_calls_with_the_same_attribute
@@ -47,7 +47,7 @@ module ActiveModel
           attributes :id, :title, :title, :body
         end
 
-        assert_equal([:id, :title, :body], serializer_class._attributes)
+        assert_equal(%i[id title body], serializer_class._attributes)
       end
     end
   end

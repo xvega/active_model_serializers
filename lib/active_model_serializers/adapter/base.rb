@@ -6,9 +6,11 @@ module ActiveModelSerializers
   module Adapter
     class Base
       # Automatically register adapters when subclassing
+      # rubocop:disable Lint/MissingSuper
       def self.inherited(subclass)
         ActiveModelSerializers::Adapter.register(subclass)
       end
+      # rubocop:enable Lint/MissingSuper
 
       # Sets the default transform for the adapter.
       #
@@ -24,6 +26,7 @@ module ActiveModelSerializers
       # @return [Symbol] the transform to use
       def self.transform(options)
         return options[:key_transform] if options && options[:key_transform]
+
         ActiveModelSerializers.config.key_transform || default_key_transform
       end
 

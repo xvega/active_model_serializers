@@ -8,6 +8,7 @@ module ActiveModel
       class ModelWithOptions < ActiveModelSerializers::Model
         attributes :name, :description
       end
+
       class ModelWithOptionsSerializer < ActiveModel::Serializer
         attributes :name, :description
 

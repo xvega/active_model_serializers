@@ -22,7 +22,7 @@ module ActiveModelSerializers
   end
 
   class << self; attr_accessor :logger; end
-  self.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(STDOUT))
+  self.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new($stdout))
 
   def self.config
     ActiveModel::Serializer.config

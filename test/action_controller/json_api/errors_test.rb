@@ -10,7 +10,7 @@ module ActionController
           get :render_resource_with_errors
 
           expected_errors_object = {
-            errors:               [
+            errors: [
               { source: { pointer: '/data/attributes/name' }, detail: 'cannot be nil' },
               { source: { pointer: '/data/attributes/name' }, detail: 'must be longer' },
               { source: { pointer: '/data/attributes/id' }, detail: 'must be a uuid' }
@@ -20,7 +20,7 @@ module ActionController
         end
 
         def json_response_body
-          JSON.load(@response.body)
+          JSON.parse(@response.body)
         end
 
         class ErrorsTestController < ActionController::Base

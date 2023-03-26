@@ -45,8 +45,8 @@ module ActiveModelSerializers
     # :nocov:
 
     if Rails.env.test?
-      ActionController::TestCase.send(:include, ActiveModelSerializers::Test::Schema)
-      ActionController::TestCase.send(:include, ActiveModelSerializers::Test::Serializer)
+      ActionController::TestCase.include ActiveModelSerializers::Test::Schema
+      ActionController::TestCase.include ActiveModelSerializers::Test::Serializer
     end
   end
 end

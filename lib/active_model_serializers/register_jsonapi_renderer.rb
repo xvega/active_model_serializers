@@ -26,10 +26,10 @@
 # No wrapper format needed as it does not apply (i.e. no `wrap_parameters format: [jsonapi]`)
 module ActiveModelSerializers
   module Jsonapi
-    MEDIA_TYPE = 'application/vnd.api+json'.freeze
+    MEDIA_TYPE = 'application/vnd.api+json'
     HEADERS = {
-      response: { 'CONTENT_TYPE'.freeze => MEDIA_TYPE },
-      request:  { 'ACCEPT'.freeze => MEDIA_TYPE }
+      response: { 'CONTENT_TYPE' => MEDIA_TYPE },
+      request: { 'ACCEPT' => MEDIA_TYPE }
     }.freeze
 
     def self.install

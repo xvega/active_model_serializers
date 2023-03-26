@@ -28,7 +28,7 @@ ActiveModelSerializers::Adapter::Base.class_eval do
   end
 end
 require 'fileutils'
-FileUtils.mkdir_p(File.expand_path('../../tmp/cache', __FILE__))
+FileUtils.mkdir_p(File.expand_path('../tmp/cache', __dir__))
 
 gem 'minitest'
 require 'minitest'

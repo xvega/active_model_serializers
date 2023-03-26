@@ -18,6 +18,7 @@ module ActiveModelSerializers
         end
 
         class Post < ::Model; end
+
         class PostSerializer < ActiveModel::Serializer
           attributes :id, :title, :body, :publish_at
         end

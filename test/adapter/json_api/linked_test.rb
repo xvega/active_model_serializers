@@ -3,13 +3,16 @@
 require 'test_helper'
 
 class NestedPost < ::Model; associations :nested_posts end
+
 class NestedPostSerializer < ActiveModel::Serializer
   has_many :nested_posts
 end
+
 module ActiveModelSerializers
   module Adapter
     class JsonApi
       class LinkedTest < ActiveSupport::TestCase
+        # rubocop:disable Metrics/AbcSize
         def setup
           @author1 = Author.new(id: 1, name: 'Steve K.')
           @author2 = Author.new(id: 2, name: 'Tenderlove')
@@ -43,16 +46,17 @@ module ActiveModelSerializers
           @bio1.author = @author1
           @bio2.author = @author2
         end
+        # rubocop:enable Metrics/AbcSize
 
         def test_include_multiple_posts_and_linked_array
           serializer = ActiveModel::Serializer::CollectionSerializer.new([@first_post, @second_post])
           adapter = ActiveModelSerializers::Adapter::JsonApi.new(
             serializer,
-            include: [:comments, author: [:bio]]
+            include: [:comments, { author: [:bio] }]
           )
           alt_adapter = ActiveModelSerializers::Adapter::JsonApi.new(
             serializer,
-            include: [:comments, author: [:bio]]
+            include: [:comments, { author: [:bio] }]
           )
 
           expected = {

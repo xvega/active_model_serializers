@@ -9,9 +9,11 @@ module ActionController
         attributes :id, :title, :body
         associations :writer, :chapters
       end
+
       class Chapter < ::Model
         attributes :title
       end
+
       class Writer < ::Model
         attributes :name
       end

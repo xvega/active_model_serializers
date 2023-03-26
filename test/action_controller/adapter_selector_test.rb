@@ -9,6 +9,7 @@ module ActionController
         attributes :id, :name, :description
         associations :comments
       end
+
       class ProfileSerializer < ActiveModel::Serializer
         type 'profiles'
         attributes :name, :description

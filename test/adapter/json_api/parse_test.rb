@@ -38,7 +38,7 @@ module ActiveModelSerializers
               src: 'http://example.com/images/productivity.png',
               author_id: nil,
               photographer_id: '9',
-              comment_ids: %w(1 2)
+              comment_ids: %w[1 2]
             }
 
             @illformed_payloads = [nil,
@@ -87,7 +87,7 @@ module ActiveModelSerializers
           end
 
           def test_filter_fields_only
-            parsed_hash = ActiveModelSerializers::Adapter::JsonApi::Deserialization.parse!(@hash, only: [:id, :title, :author])
+            parsed_hash = ActiveModelSerializers::Adapter::JsonApi::Deserialization.parse!(@hash, only: %i[id title author])
             expected = {
               id: 'zorglub',
               title: 'Ember Hamster',
@@ -97,11 +97,11 @@ module ActiveModelSerializers
           end
 
           def test_filter_fields_except
-            parsed_hash = ActiveModelSerializers::Adapter::JsonApi::Deserialization.parse!(@hash, except: [:id, :title, :author])
+            parsed_hash = ActiveModelSerializers::Adapter::JsonApi::Deserialization.parse!(@hash, except: %i[id title author])
             expected = {
               src: 'http://example.com/images/productivity.png',
               photographer_id: '9',
-              comment_ids: %w(1 2)
+              comment_ids: %w[1 2]
             }
             assert_equal(expected, parsed_hash)
           end
@@ -114,7 +114,7 @@ module ActiveModelSerializers
               src: 'http://example.com/images/productivity.png',
               user_id: nil,
               photographer_id: '9',
-              comment_ids: %w(1 2)
+              comment_ids: %w[1 2]
             }
             assert_equal(expected, parsed_hash)
           end
@@ -128,7 +128,7 @@ module ActiveModelSerializers
               author_id: nil,
               photographer_id: '9',
               photographer_type: 'Person',
-              comment_ids: %w(1 2)
+              comment_ids: %w[1 2]
             }
             assert_equal(expected, parsed_hash)
           end

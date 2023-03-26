@@ -91,10 +91,8 @@ module ActiveModel
 
         private
 
-        def assert_deprecated
-          assert_output(nil, /deprecated/) do
-            yield
-          end
+        def assert_deprecated(&block)
+          assert_output(nil, /deprecated/, &block)
         end
       end
     end

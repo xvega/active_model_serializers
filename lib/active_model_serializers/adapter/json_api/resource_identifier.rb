@@ -5,7 +5,7 @@ module ActiveModelSerializers
     class JsonApi
       class ResourceIdentifier
         def self.type_for(serializer, serializer_type = nil, transform_options = {})
-          raw_type = serializer_type ? serializer_type : raw_type_from_serializer_object(serializer.object)
+          raw_type = serializer_type || raw_type_from_serializer_object(serializer.object)
           JsonApi.send(:transform_key_casing!, raw_type, transform_options)
         end
 
@@ -24,7 +24,7 @@ module ActiveModelSerializers
           raw_type = class_name.underscore
           raw_type = inflect_type(raw_type)
           raw_type
-            .gsub!('/'.freeze, ActiveModelSerializers.config.jsonapi_namespace_separator)
+            .gsub!('/', ActiveModelSerializers.config.jsonapi_namespace_separator)
           raw_type
         end
 

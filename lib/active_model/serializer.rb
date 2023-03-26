@@ -17,7 +17,7 @@ module ActiveModel
     # sometimes conflict with attribute names. We don't need these IO methods.
 
     # @see #serializable_hash for more details on these valid keys.
-    SERIALIZABLE_HASH_VALID_KEYS = [:only, :except, :methods, :include, :root].freeze
+    SERIALIZABLE_HASH_VALID_KEYS = %i[only except methods include root].freeze
     extend ActiveSupport::Autoload
     eager_autoload do
       autoload :Adapter
@@ -46,7 +46,7 @@ module ActiveModel
       elsif resource_or_class.respond_to?(:to_ary)
         config.collection_serializer
       else
-        resource_class = resource_or_class.class == Class ? resource_or_class : resource_or_class.class
+        resource_class = resource_or_class.instance_of?(Class) ? resource_or_class : resource_or_class.class
         options.fetch(:serializer) { get_serializer_for(resource_class, options[:namespace]) }
       end
     end
@@ -138,7 +138,7 @@ module ActiveModel
     config.key_transform = nil
     config.jsonapi_pagination_links_enabled = true
     config.jsonapi_resource_type = :plural
-    config.jsonapi_namespace_separator = '-'.freeze
+    config.jsonapi_namespace_separator = '-'
     config.jsonapi_version = '1.0'
     config.jsonapi_toplevel_meta = {}
     # Make JSON API top-level jsonapi member opt-in
@@ -204,7 +204,7 @@ module ActiveModel
     #   class AdminAuthorSerializer < ActiveModel::Serializer
     #     attributes :id, :name, :recent_edits
     def self.attributes(*attrs)
-      attrs = attrs.first if attrs.first.class == Array
+      attrs = attrs.first if attrs.first.instance_of?(Array)
 
       attrs.each do |attr|
         attribute(attr)
@@ -333,14 +333,17 @@ module ActiveModel
 
     # Return the +attributes+ of +object+ as presented
     # by the serializer.
+    # rubocop:disable Style/OptionalBooleanParameter
     def attributes(requested_attrs = nil, reload = false)
       @attributes = nil if reload
       @attributes ||= self.class._attributes_data.each_with_object({}) do |(key, attr), hash|
         next if attr.excluded?(self)
         next unless requested_attrs.nil? || requested_attrs.include?(key)
+
         hash[key] = attr.value(self)
       end
     end
+    # rubocop:enable Style/OptionalBooleanParameter
 
     # @param [JSONAPI::IncludeDirective] include_directive (defaults to the
     #   +default_include_directive+ config value when not provided)

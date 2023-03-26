@@ -11,8 +11,8 @@ module ActiveModel
       end
 
       def test_attributes_definition
-        assert_equal([:id, :title],
-          @blog_serializer.class._attributes)
+        assert_equal(%i[id title],
+                     @blog_serializer.class._attributes)
       end
 
       def test_json_serializable_hash
@@ -84,6 +84,7 @@ module ActiveModel
       end
 
       class PostWithVirtualAttribute < ::Model; attributes :first_name, :last_name end
+
       class PostWithVirtualAttributeSerializer < ActiveModel::Serializer
         attribute :name do
           "#{object.first_name} #{object.last_name}"
@@ -99,6 +100,7 @@ module ActiveModel
       end
 
       # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Lint/BooleanSymbol
       def test_conditional_associations
         model = Class.new(::Model) do
           attributes :true, :false, :attribute
@@ -117,10 +119,10 @@ module ActiveModel
           { options: { if:     -> { object.false } }, included: false },
           { options: { unless: -> { object.false } }, included: true  },
           { options: { unless: -> { object.true }  }, included: false },
-          { options: { if:     -> (s) { s.object.true }  }, included: true  },
-          { options: { if:     -> (s) { s.object.false } }, included: false },
-          { options: { unless: -> (s) { s.object.false } }, included: true  },
-          { options: { unless: -> (s) { s.object.true }  }, included: false }
+          { options: { if:     ->(s) { s.object.true }  }, included: true  },
+          { options: { if:     ->(s) { s.object.false } }, included: false },
+          { options: { unless: ->(s) { s.object.false } }, included: true  },
+          { options: { unless: ->(s) { s.object.true }  }, included: false }
         ]
 
         scenarios.each do |s|
@@ -140,6 +142,8 @@ module ActiveModel
           assert_equal(s[:included], hash.key?(:attribute), "Error with #{s[:options]}")
         end
       end
+      # rubocop:enable Metrics/AbcSize
+      # rubocop:enable Lint/BooleanSymbol
 
       def test_illegal_conditional_attributes
         exception = assert_raises(TypeError) do

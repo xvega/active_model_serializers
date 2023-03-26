@@ -10,9 +10,11 @@ module ActiveModelSerializers
           attributes :title, :body
           associations :author, :comments
         end
+
         class Author < ::Model
           attributes :name, :birthday
         end
+
         class Comment < ::Model
           attributes :body
           associations :author, :post

@@ -16,12 +16,12 @@ class ApiAssertion
     assert_responses(caching, non_caching)
   rescue BadRevisionError => e
     msg = { error: e.message }
-    STDERR.puts msg
-    STDOUT.puts msg
+    warn msg
+    $stdout.puts msg
     exit 1
   end
 
-  def get_status(on_off = 'on'.freeze)
+  def get_status(on_off = 'on')
     get("/status/#{on_off}")
   end
 
@@ -29,23 +29,23 @@ class ApiAssertion
     get('/clear')
   end
 
-  def get_caching(on_off = 'on'.freeze)
+  def get_caching(on_off = 'on')
     get("/caching/#{on_off}")
   end
 
-  def get_fragment_caching(on_off = 'on'.freeze)
+  def get_fragment_caching(on_off = 'on')
     get("/fragment_caching/#{on_off}")
   end
 
-  def get_non_caching(on_off = 'on'.freeze)
+  def get_non_caching(on_off = 'on')
     get("/non_caching/#{on_off}")
   end
 
   def debug(msg = '')
     if block_given? && ENV['DEBUG'] =~ /\Atrue|on|0\z/i
-      STDERR.puts yield
+      warn yield
     else
-      STDERR.puts msg
+      warn msg
     end
   end
 
@@ -62,7 +62,7 @@ class ApiAssertion
 
   def get(url)
     response = request(:get, url)
-    { code: response.status, body: JSON.load(response.body), content_type: response.content_type }
+    { code: response.status, body: JSON.parse(response.body), content_type: response.content_type }
   end
 
   def expected
@@ -71,7 +71,7 @@ class ApiAssertion
         'primary_resource' => {
           'id' => 1337,
           'title' => 'New PrimaryResource',
-          'body' =>  'Body',
+          'body' => 'Body',
           'virtual_attribute' => {
             'id' => 999,
             'name' => 'Free-Range Virtual Attribute'
@@ -96,7 +96,7 @@ class ApiAssertion
     if ENV['FAIL_ASSERTION'] =~ /\Atrue|on|0\z/i # rubocop:disable Style/GuardClause
       fail BadRevisionError, message
     else
-      STDERR.puts message unless ENV['SUMMARIZE']
+      warn message unless ENV['SUMMARIZE']
     end
   end
 end

@@ -57,7 +57,7 @@ namespace :test do
         command = "-w -I#{dir}/lib -I#{dir}/test #{Shellwords.shellescape(test_file)}"
         full_command = %("#{Gem.ruby}" #{command})
         system(full_command)
-      end or fail 'Failures' # rubocop:disable Style/AndOr
+      end or fail 'Failures'
     end
     bundler_method =
       if Bundler.respond_to?(:with_unbundled_env)
@@ -70,9 +70,9 @@ namespace :test do
 end
 
 if ENV['RAILS_VERSION'].to_s > '4.0' && RUBY_ENGINE == 'ruby'
-  task default: [:isolated, :test, :rubocop]
+  task default: %i[isolated test rubocop]
 else
-  task default: [:test, :rubocop]
+  task default: %i[test rubocop]
 end
 
 desc 'CI test task'

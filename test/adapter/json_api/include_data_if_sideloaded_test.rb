@@ -16,6 +16,7 @@ module ActiveModel
               [{ foo: 'bar' }]
             end
           end
+
           class Tag < ::Model
             attributes :id, :name
           end
@@ -78,6 +79,7 @@ module ActiveModel
 
             @author.define_singleton_method(:read_attribute_for_serialization) do |attr|
               fail 'should not be called' if attr == :tags
+
               super(attr)
             end
 
@@ -160,6 +162,7 @@ module ActiveModel
 
             @author.define_singleton_method(:read_attribute_for_serialization) do |attr|
               fail 'should not be called' if attr == :tags
+
               super(attr)
             end
 
@@ -169,6 +172,7 @@ module ActiveModel
           def test_include_params_with_no_block
             @author.define_singleton_method(:read_attribute_for_serialization) do |attr|
               fail 'should not be called' if attr == :locations
+
               super(attr)
             end
 

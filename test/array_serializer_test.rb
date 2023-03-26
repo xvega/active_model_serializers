@@ -11,9 +11,9 @@ module ActiveModel
         _, stderr = capture_io do
           super
         end
-        if stderr !~ /NOTE: ActiveModel::Serializer::ArraySerializer.new is deprecated/
-          fail Minitest::Assertion, stderr
-        end
+        return unless stderr !~ /NOTE: ActiveModel::Serializer::ArraySerializer.new is deprecated/
+
+        fail Minitest::Assertion, stderr
       end
 
       def collection_serializer

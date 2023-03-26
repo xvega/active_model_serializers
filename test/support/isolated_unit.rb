@@ -52,6 +52,7 @@ module TestHelpers
 
     # Make a very basic app, without creating the whole directory structure.
     # Is faster and simpler than generating a Rails app in a temp directory
+    # rubocop:disable Metrics/AbcSize
     def make_basic_app
       require 'rails'
       require 'action_controller/railtie'
@@ -77,6 +78,7 @@ module TestHelpers
       yield @app if block_given?
       @app.initialize!
     end
+    # rubocop:enable Metrics/AbcSize
   end
 end
 

@@ -48,14 +48,14 @@ module ActiveModelSerializers
 
     # Opt-in to breaking change
     def self.derive_attributes_from_names_and_fix_accessors
-      unless included_modules.include?(DeriveAttributesFromNamesAndFixAccessors)
-        prepend(DeriveAttributesFromNamesAndFixAccessors)
-      end
+      return if included_modules.include?(DeriveAttributesFromNamesAndFixAccessors)
+
+      prepend(DeriveAttributesFromNamesAndFixAccessors)
     end
 
     module DeriveAttributesFromNamesAndFixAccessors
       def self.included(base)
-        # NOTE that +id+ will always be in +attributes+.
+        # NOTE: that +id+ will always be in +attributes+.
         base.attributes :id
       end
 

@@ -69,8 +69,8 @@ class PrimaryResourceController < ActionController::Base
 
   def toggle_cache_status
     case params[:on]
-    when 'on'.freeze then self.perform_caching = true
-    when 'off'.freeze then self.perform_caching = false
+    when 'on' then self.perform_caching = true
+    when 'off' then self.perform_caching = false
     else nil # no-op
     end
   end

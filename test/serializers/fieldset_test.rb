@@ -6,17 +6,17 @@ module ActiveModel
   class Serializer
     class FieldsetTest < ActiveSupport::TestCase
       def setup
-        @fieldset = ActiveModel::Serializer::Fieldset.new('post' => %w(id title), 'comment' => ['body'])
+        @fieldset = ActiveModel::Serializer::Fieldset.new('post' => %w[id title], 'comment' => ['body'])
       end
 
       def test_fieldset_with_hash
-        expected = { post: [:id, :title], comment: [:body] }
+        expected = { post: %i[id title], comment: [:body] }
 
         assert_equal(expected, @fieldset.fields)
       end
 
       def test_fields_for_accepts_string_or_symbol
-        expected = [:id, :title]
+        expected = %i[id title]
 
         assert_equal(expected, @fieldset.fields_for(:post))
         assert_equal(expected, @fieldset.fields_for('post'))

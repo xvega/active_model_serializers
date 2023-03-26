@@ -5,8 +5,8 @@ module ActiveModelSerializers
     module_function
 
     POINTERS = {
-      attribute:    '/data/attributes/%s'.freeze,
-      primary_data: '/data%s'.freeze
+      attribute: '/data/attributes/%s',
+      primary_data: '/data%s'
     }.freeze
 
     def new(pointer_type, value = nil)

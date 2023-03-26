@@ -10,9 +10,8 @@ module Benchmark
     module TestMethods
       def request(method, path)
         response = Rack::MockRequest.new(BenchmarkApp).send(method, path)
-        if response.status.in?([404, 500])
-          fail "omg, #{method}, #{path}, '#{response.status}', '#{response.body}'"
-        end
+        fail "omg, #{method}, #{path}, '#{response.status}', '#{response.body}'" if response.status.in?([404, 500])
+
         response
       end
     end
@@ -28,7 +27,7 @@ module Benchmark
       end
 
       report = Benchmark.ips(time, warmup, true) do |x|
-        x.report(label) { yield }
+        x.report(label, &block)
       end
 
       entry = report.entries.first

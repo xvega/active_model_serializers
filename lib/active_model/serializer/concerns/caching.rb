@@ -38,7 +38,7 @@ module ActiveModel
           :\d+     # a colon is followed by one or more digits
           :in      # followed by a colon followed by in
         )
-      /x
+      /x.freeze
 
       module ClassMethods
         def inherited(base)
@@ -49,6 +49,7 @@ module ActiveModel
 
         def _cache_digest
           return @_cache_digest if defined?(@_cache_digest)
+
           @_cache_digest = digest_caller_file(_cache_digest_file_path)
         end
 
@@ -59,12 +60,12 @@ module ActiveModel
           algorithm = ActiveModelSerializers.config.use_sha1_digests ? Digest::SHA1 : Digest::MD5
           algorithm.hexdigest(serializer_file_contents)
         rescue TypeError, Errno::ENOENT
-          warn <<-EOF.strip_heredoc
+          warn <<-WARNING.strip_heredoc
             Cannot digest non-existent file: '#{caller_line}'.
             Please set `::_cache_digest` of the serializer
             if you'd like to cache it.
-            EOF
-          ''.freeze
+          WARNING
+          ''
         end
 
         def _skip_digest?
@@ -79,12 +80,13 @@ module ActiveModel
           _attributes_data
             .each_with_object({}) do |(key, attr), hash|
             next if key == attr.name
+
             hash[attr.name] = { key: key }
           end
         end
 
         def fragmented_attributes
-          cached = _cache_only ? _cache_only : _attributes - _cache_except
+          cached = _cache_only || _attributes - _cache_except
           cached = cached.map! { |field| _attributes_keys.fetch(field, field) }
           non_cached = _attributes - cached
           non_cached = non_cached.map! { |field| _attributes_keys.fetch(field, field) }
@@ -137,6 +139,7 @@ module ActiveModel
         # rubocop:disable Style/ClassVars
         def perform_caching
           return @@perform_caching if defined?(@@perform_caching) && !@@perform_caching.nil?
+
           @@perform_caching = ActiveModelSerializers.config.perform_caching
         end
         alias perform_caching? perform_caching
@@ -155,6 +158,7 @@ module ActiveModel
         def cache_store
           return nil if _cache.nil?
           return _cache if _cache.class != ActiveSupport::Cache::NullStore
+
           if ActiveModelSerializers.config.cache_store
             self._cache = ActiveModelSerializers.config.cache_store
           else
@@ -215,7 +219,7 @@ module ActiveModel
         def object_cache_key(serializer, adapter_instance)
           return unless serializer.present? && serializer.object.present?
 
-          (serializer.class.cache_enabled? || serializer.class.fragment_cache_enabled?) ? serializer.cache_key(adapter_instance) : nil
+          serializer.class.cache_enabled? || serializer.class.fragment_cache_enabled? ? serializer.cache_key(adapter_instance) : nil
         end
       end
 
@@ -229,12 +233,10 @@ module ActiveModel
         end
       end
 
-      def fetch(adapter_instance, cache_options = serializer_class._cache_options, key = nil)
+      def fetch(adapter_instance, cache_options = serializer_class._cache_options, key = nil, &block)
         if serializer_class.cache_store
           key ||= cache_key(adapter_instance)
-          serializer_class.cache_store.fetch(key, cache_options) do
-            yield
-          end
+          serializer_class.cache_store.fetch(key, cache_options, &block)
         else
           yield
         end
@@ -243,6 +245,7 @@ module ActiveModel
       # 1. Determine cached fields from serializer class options
       # 2. Get non_cached_fields and fetch cache_fields
       # 3. Merge the two hashes using adapter_instance#fragment_cache
+      # rubocop:disable Metrics/AbcSize
       def fetch_attributes_fragment(adapter_instance, cached_attributes = {})
         serializer_class._cache_options ||= {}
         serializer_class._cache_options[:key] = serializer_class._cache_key if serializer_class._cache_key
@@ -266,6 +269,7 @@ module ActiveModel
         # Merge both results
         adapter_instance.fragment_cache(cached_hash, non_cached_hash)
       end
+      # rubocop:enable Metrics/AbcSize
 
       def cache_key(adapter_instance)
         return @cache_key if defined?(@cache_key)

@@ -5,6 +5,7 @@ module ActiveModelSerializers
   class SerializationContext
     class << self
       attr_writer :url_helpers, :default_url_options
+
       def url_helpers
         @url_helpers ||= Module.new
       end

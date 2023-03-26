@@ -13,21 +13,21 @@ module ActiveModelSerializers
           @collection = collection
           @adapter_options = adapter_options
           @context = adapter_options.fetch(:serialization_context) do
-            fail MissingSerializationContextError, <<-EOF.freeze
- JsonApi::PaginationLinks requires a ActiveModelSerializers::SerializationContext.
- Please pass a ':serialization_context' option or
- override CollectionSerializer#paginated? to return 'false'.
-            EOF
+            fail MissingSerializationContextError, <<-ERROR_MESSAGE.strip_heredoc
+              JsonApi::PaginationLinks requires an ActiveModelSerializers::SerializationContext.
+              Please pass a ':serialization_context' option or
+              override CollectionSerializer#paginated? to return 'false'.
+            ERROR_MESSAGE
           end
         end
 
         def as_json
           {
-            self:  location_url,
+            self: location_url,
             first: first_page_url,
-            prev:  prev_page_url,
-            next:  next_page_url,
-            last:  last_page_url
+            prev: prev_page_url,
+            next: next_page_url,
+            last: last_page_url
           }
         end
 
@@ -46,7 +46,7 @@ module ActiveModelSerializers
         end
 
         def last_page_url
-          if collection.total_pages == 0
+          if collection.total_pages.zero?
             url_for_page(FIRST_PAGE)
           else
             url_for_page(collection.total_pages)
@@ -55,15 +55,15 @@ module ActiveModelSerializers
 
         def prev_page_url
           return nil if collection.current_page == FIRST_PAGE
-          if collection.current_page > collection.total_pages
-            return url_for_page(collection.total_pages)
-          end
+          return url_for_page(collection.total_pages) if collection.current_page > collection.total_pages
+
           url_for_page(collection.current_page - FIRST_PAGE)
         end
 
         def next_page_url
-          return nil if collection.total_pages == 0 ||
-              collection.current_page >= collection.total_pages
+          return nil if collection.total_pages.zero? ||
+            collection.current_page >= collection.total_pages
+
           url_for_page(collection.next_page)
         end
 

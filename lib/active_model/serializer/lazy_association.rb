@@ -3,9 +3,8 @@
 module ActiveModel
   class Serializer
     # @api private
+    REFLECTION_OPTIONS = %i[key links polymorphic meta serializer virtual_value namespace].freeze
     LazyAssociation = Struct.new(:reflection, :association_options) do
-      REFLECTION_OPTIONS = %i(key links polymorphic meta serializer virtual_value namespace).freeze
-
       delegate :collection?, to: :reflection
 
       def reflection_options
@@ -14,6 +13,7 @@ module ActiveModel
 
       def object
         return @object if defined?(@object)
+
         @object = reflection.value(
           association_options.fetch(:parent_serializer),
           association_options.fetch(:include_slice)
@@ -31,6 +31,7 @@ module ActiveModel
       # @return [ActiveModel::Serializer, nil]
       def serializer
         return @serializer if defined?(@serializer)
+
         if serializer_class
           serialize_object!(object)
         elsif !object.nil? && !object.instance_of?(Object)
@@ -45,6 +46,7 @@ module ActiveModel
 
       def serializer_class
         return @serializer_class if defined?(@serializer_class)
+
         serializer_for_options = { namespace: namespace }
         serializer_for_options[:serializer] = reflection_options[:serializer] if reflection_options.key?(:serializer)
         @serializer_class = association_options.fetch(:parent_serializer).class.serializer_for(object, serializer_for_options)
@@ -84,10 +86,9 @@ module ActiveModel
       end
 
       def instantiate_collection_serializer(object)
-        serializer = catch(:no_serializer) do
+        catch(:no_serializer) do
           instantiate_serializer(object)
         end
-        serializer
       end
 
       def namespace

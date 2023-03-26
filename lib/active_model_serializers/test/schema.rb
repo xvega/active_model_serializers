@@ -107,8 +107,8 @@ module ActiveModelSerializers
 
         def load_json(json)
           JSON.parse(json)
-        rescue JSON::ParserError => ex
-          raise InvalidSchemaError, ex.message
+        rescue JSON::ParserError => e
+          raise InvalidSchemaError, e.message
         end
 
         def load_json_file(path)
@@ -123,12 +123,14 @@ module ActiveModelSerializers
           raise LoadError, "You don't have json_schema installed in your application. Please add it to your Gemfile and run bundle install"
         end
       end
+
       class AssertResponseSchema < AssertSchema
         def initialize(*)
           super
           @payload = response_body
         end
       end
+
       class AssertRequestSchema < AssertSchema
         def initialize(*)
           super

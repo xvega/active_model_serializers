@@ -10,7 +10,7 @@ module ActiveModelSerializers
   module Adapter
     class JsonApi
       class PaginationLinksTest < ActiveSupport::TestCase
-        URI = 'http://example.com'.freeze
+        URI = 'http://example.com'
 
         def setup
           ActionController::Base.cache_store.clear
@@ -176,7 +176,7 @@ module ActiveModelSerializers
           adapter = load_adapter(using_will_paginate, mock_request(test: 'test'))
 
           assert_equal expected_response_with_pagination_links_and_additional_params,
-            adapter.serializable_hash
+                       adapter.serializable_hash
         end
 
         def test_pagination_links_when_zero_results_kaminari
