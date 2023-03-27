@@ -51,7 +51,7 @@ Gem::Specification.new do |spec|
   # activemodel
 
   # Soft dependency for pagination
-  spec.add_development_dependency 'kaminari', ' ~> 0.16.3'
+  spec.add_development_dependency 'kaminari', ' ~> 1.2.2'
   spec.add_development_dependency 'will_paginate', '~> 3.0', '>= 3.0.7'
 
   spec.add_development_dependency 'bundler'

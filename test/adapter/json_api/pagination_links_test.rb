@@ -3,8 +3,6 @@
 require 'test_helper'
 require 'will_paginate/array'
 require 'kaminari'
-require 'kaminari/hooks'
-::Kaminari::Hooks.init
 
 module ActiveModelSerializers
   module Adapter
